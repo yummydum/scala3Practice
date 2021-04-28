@@ -45,9 +45,9 @@ def readTransformWrite[A](
   Using.Manager { use =>
     val reader = use(CSVReader.open(File(infile)))
     val writer = use(CSVWriter.open(File(outfile)))
-    for (line <- func(reader.iterator.drop(1))) {
-      writer.writeRow(line)
-    }
+    val data = reader.iterator.drop(1)
+    process(data)
+      .foreach(x => writer.writeRow(x))
   }
 }
 
