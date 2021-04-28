@@ -1,3 +1,6 @@
+import myutils.func.tupleToCsv
+import myutils.encoder.instances.given
+
 import java.io.{BufferedWriter, FileWriter}
 import scala.io.Source.fromFile
 import scala.util.{Failure, Success, Using}
@@ -27,25 +30,24 @@ def parse(line: String) = {
   )
 }
 
-def process(data: Iterator[String]): Iterator[String] = {
+def process(data: Iterator[String]): Iterator[List[String]] = {
   data
     .map(parse)
     .filter(x => x.avail_seat_km_per_week <= 400000000)
-    .map(x => s"${x.airline},${x.fatalities_85_99}\n")
+    .map(x => tupleToCsv(Tuple.fromProductTyped(x)))
 }
 
 def readTransformWrite[A](
     infile: String,
     outfile: String,
-    func: Iterator[String] => Iterator[String],
-    header: Boolean = true
+    func: Iterator[String] => Iterator[List[String]]
 ) = {
   Using.Manager { use =>
     val reader = use(fromFile(infile))
     val writer = use(new BufferedWriter(new FileWriter(outfile)))
     val data = reader.getLines().drop(1) // Drop header
     for (line <- func(data)) {
-      writer.write(line)
+      writer.write(s"""${line.mkString(",")}\n""")
     }
   }
 }

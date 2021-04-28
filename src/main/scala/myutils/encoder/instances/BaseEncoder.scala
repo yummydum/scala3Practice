@@ -8,5 +8,8 @@ given FieldEncoder[Int] with
 given FieldEncoder[Boolean] with
   def encodeField(x: Boolean) = if x then "true" else "false"
 
+given FieldEncoder[Long] with
+  def encodeField(x: Long) = x.toString
+
 given FieldEncoder[String] with
   def encodeField(x: String) = x
