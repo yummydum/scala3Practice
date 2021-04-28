@@ -1,5 +1,4 @@
-package myutils
-package encoder 
+package myutils.encoder
 
 trait FieldEncoder[A]:
   def encodeField(a: A): String

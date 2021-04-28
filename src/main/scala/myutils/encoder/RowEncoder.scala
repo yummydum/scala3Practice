@@ -1,5 +1,4 @@
-package myutils
-package encoder 
+package myutils.encoder
 
 type Row = List[String]
 

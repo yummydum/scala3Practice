@@ -1,4 +1,4 @@
-import myutils.encoder.instances.func.tupleToCsv
+import myutils.func.tupleToCsv
 import myutils.encoder.instances.given
 import org.junit.Test
 import org.junit.Assert._
