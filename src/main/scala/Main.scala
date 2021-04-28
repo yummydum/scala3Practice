@@ -1,5 +1,6 @@
-import myutils.tupleToCsv
+import myutils.{tupleToCsv, csvToTuple}
 import myutils.encoder.instances.given
+import myutils.decoder.instances.given
 
 import java.io.File
 import scala.util.{Failure, Success, Using}
@@ -52,8 +53,9 @@ def readTransformWrite[A](
 }
 
 @main def go(): Unit = {
-  readTransformWrite("data.csv", "output.csv", process) match {
-    case Success(xs) => println("Success")
-    case Failure(f)  => println(f)
-  }
+  csvToTuple(List("42", "true", "Hello"))
+//  readTransformWrite("data.csv", "output.csv", process) match {
+//    case Success(xs) => println("Success")
+//    case Failure(f)  => println(f)
+//  }
 }

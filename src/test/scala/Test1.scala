@@ -15,7 +15,7 @@ class Test1 {
   @Test def testcsvToTuple(): Unit = {
     assertEquals(
       (42, true, "Hello"),
-      csvToTuple(List("42", "true", "Hello"))
+      csvToTuple[(Int, Boolean, String)](List("42", "true", "Hello"))
     )
   }
 }
