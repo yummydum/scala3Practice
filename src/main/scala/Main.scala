@@ -1,4 +1,4 @@
-import myutils.func.tupleToCsv
+import myutils.tupleToCsv
 import myutils.encoder.instances.given
 
 import java.io.File
@@ -45,7 +45,7 @@ def readTransformWrite[A](
   Using.Manager { use =>
     val reader = use(CSVReader.open(File(infile)))
     val writer = use(CSVWriter.open(File(outfile)))
-    val data = reader.iterator.drop(1)
+    val data = reader.iterator.drop(1) // drop header
     process(data)
       .foreach(x => writer.writeRow(x))
   }

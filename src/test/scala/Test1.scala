@@ -1,13 +1,21 @@
-import myutils.func.tupleToCsv
+import myutils.{tupleToCsv, csvToTuple}
 import myutils.encoder.instances.given
+import myutils.decoder.instances.given
 import org.junit.Test
 import org.junit.Assert._
 
 class Test1 {
-  @Test def testCaseClass2CSV(): Unit = {
+  @Test def testCaseClassToCSV(): Unit = {
     assertEquals(
-      tupleToCsv((42, true, "Hello")),
-      List("42", "true", "Hello")
+      List("42", "true", "Hello"),
+      tupleToCsv((42, true, "Hello"))
+    )
+  }
+
+  @Test def testcsvToTuple(): Unit = {
+    assertEquals(
+      (42, true, "Hello"),
+      csvToTuple(List("42", "true", "Hello"))
     )
   }
 }
