@@ -1,9 +1,10 @@
 import myutils.func.tupleToCsv
 import myutils.encoder.instances.given
 
-import java.io.{BufferedWriter, FileWriter}
-import scala.io.Source.fromFile
+import java.io.File
 import scala.util.{Failure, Success, Using}
+
+import com.github.tototoshi.csv._
 
 case class Airline(
     airline: String,
@@ -16,8 +17,7 @@ case class Airline(
     fatalities_00_14: Int
 )
 
-def parse(line: String) = {
-  val row = line.split(',')
+def parse(row: Seq[String]) = {
   Airline(
     row(0),
     row(1).toLong,
@@ -30,7 +30,7 @@ def parse(line: String) = {
   )
 }
 
-def process(data: Iterator[String]): Iterator[List[String]] = {
+def process(data: Iterator[Seq[String]]): Iterator[List[String]] = {
   data
     .map(parse)
     .filter(x => x.avail_seat_km_per_week <= 400000000)
@@ -40,14 +40,13 @@ def process(data: Iterator[String]): Iterator[List[String]] = {
 def readTransformWrite[A](
     infile: String,
     outfile: String,
-    func: Iterator[String] => Iterator[List[String]]
+    func: Iterator[Seq[String]] => Iterator[List[String]]
 ) = {
   Using.Manager { use =>
-    val reader = use(fromFile(infile))
-    val writer = use(new BufferedWriter(new FileWriter(outfile)))
-    val data = reader.getLines().drop(1) // Drop header
-    for (line <- func(data)) {
-      writer.write(s"""${line.mkString(",")}\n""")
+    val reader = use(CSVReader.open(File(infile)))
+    val writer = use(CSVWriter.open(File(outfile)))
+    for (line <- func(reader.iterator.drop(1))) {
+      writer.writeRow(line)
     }
   }
 }
@@ -55,6 +54,6 @@ def readTransformWrite[A](
 @main def go(): Unit = {
   readTransformWrite("data.csv", "output.csv", process) match {
     case Success(xs) => println("Success")
-    case Failure(_)  => println("Failure")
+    case Failure(f)  => println(f)
   }
 }
