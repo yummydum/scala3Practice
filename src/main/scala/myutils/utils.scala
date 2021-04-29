@@ -3,9 +3,9 @@ import myutils.encoder.RowEncoder
 import myutils.decoder.RowDecoder
 import scala.deriving.Mirror
 
-type Row = List[String]
+type Row = Seq[String]
 
-def tupleToCsv[X <: Tuple](tuple: X)(using e: RowEncoder[X]): List[String] =
+def tupleToCsv[X <: Tuple](tuple: X)(using e: RowEncoder[X]): Row =
   e.encodeRow(tuple)
 
 def productToCsv[P <: Product](

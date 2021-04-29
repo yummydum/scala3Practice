@@ -1,5 +1,5 @@
 package myutils
-package encoder 
+package encoder
 package instances
 
 given RowEncoder[EmptyTuple] with
@@ -8,5 +8,5 @@ given RowEncoder[EmptyTuple] with
 
 given [H: FieldEncoder, T <: Tuple: RowEncoder]: RowEncoder[H *: T] with
   def encodeRow(tuple: H *: T) =
-    summon[FieldEncoder[H]].encodeField(tuple.head) :: summon[RowEncoder[T]]
+    summon[FieldEncoder[H]].encodeField(tuple.head) +: summon[RowEncoder[T]]
       .encodeRow(tuple.tail)

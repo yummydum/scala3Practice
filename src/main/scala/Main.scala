@@ -1,4 +1,4 @@
-import myutils.{tupleToCsv, csvToProduct}
+import myutils.{productToCsv, csvToProduct}
 import myutils.encoder.instances.given
 import myutils.decoder.instances.given
 
@@ -18,30 +18,17 @@ case class Airline(
     fatalities_00_14: Int
 )
 
-def parse(row: Seq[String]) = {
-  Airline(
-    row(0),
-    row(1).toLong,
-    row(2).toInt,
-    row(3).toInt,
-    row(4).toInt,
-    row(5).toInt,
-    row(6).toInt,
-    row(7).toInt
-  )
-}
-
-def process(data: Iterator[Seq[String]]): Iterator[List[String]] = {
+def process(data: Iterator[Seq[String]]): Iterator[Seq[String]] = {
   data
-    .map(parse)
+    .map(x => csvToProduct[Airline](x))
     .filter(x => x.avail_seat_km_per_week <= 400000000)
-    .map(x => tupleToCsv(Tuple.fromProductTyped(x)))
+    .map(x => productToCsv(x))
 }
 
 def readTransformWrite[A](
     infile: String,
     outfile: String,
-    func: Iterator[Seq[String]] => Iterator[List[String]]
+    func: Iterator[Seq[String]] => Iterator[Seq[String]]
 ) = {
   Using.Manager { use =>
     val reader = use(CSVReader.open(File(infile)))
