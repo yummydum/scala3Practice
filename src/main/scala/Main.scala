@@ -1,4 +1,4 @@
-import myutils.{tupleToCsv, csvToTuple}
+import myutils.{tupleToCsv, csvToProduct}
 import myutils.encoder.instances.given
 import myutils.decoder.instances.given
 
@@ -53,9 +53,8 @@ def readTransformWrite[A](
 }
 
 @main def go(): Unit = {
-  csvToTuple(List("42", "true", "Hello"))
-//  readTransformWrite("data.csv", "output.csv", process) match {
-//    case Success(xs) => println("Success")
-//    case Failure(f)  => println(f)
-//  }
+  readTransformWrite("data.csv", "output.csv", process) match {
+    case Success(xs) => println("Success")
+    case Failure(f)  => println(f)
+  }
 }
