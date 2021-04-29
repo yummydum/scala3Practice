@@ -1,4 +1,4 @@
-import myutils.{productToCsv, csvToProduct}
+import myutils.{productToCsv, csvToProduct, Row}
 import myutils.encoder.instances.given
 import myutils.decoder.instances.given
 
@@ -18,7 +18,7 @@ case class Airline(
     fatalities_00_14: Int
 )
 
-def process(data: Iterator[Seq[String]]): Iterator[Seq[String]] = {
+def process(data: Iterator[Row]): Iterator[Row] = {
   data
     .map(x => csvToProduct[Airline](x))
     .filter(x => x.avail_seat_km_per_week <= 400000000)
@@ -28,7 +28,7 @@ def process(data: Iterator[Seq[String]]): Iterator[Seq[String]] = {
 def readTransformWrite[A](
     infile: String,
     outfile: String,
-    func: Iterator[Seq[String]] => Iterator[Seq[String]]
+    func: Iterator[Row] => Iterator[Row]
 ) = {
   Using.Manager { use =>
     val reader = use(CSVReader.open(File(infile)))
